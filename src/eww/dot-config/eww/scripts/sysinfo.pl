@@ -33,7 +33,7 @@ my sub ram() {
 }
 
 my sub gpu_util() {
-  ( grep( /Gpu/, `nvidia-smi -q -d UTILIZATION` ) )[0] =~ /(\d+) %$/;
+  ( grep( /GPU\s+:/, `nvidia-smi -q -d UTILIZATION` ) )[0] =~ /(\d+) %$/;
   return sprintf( '%3d%%', $1 );
 }
 
