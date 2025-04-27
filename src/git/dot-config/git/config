@@ -13,3 +13,6 @@
   context = 2
   colorMoved = dimmed-zebra
   colorMovedWS = ignore-all-space
+
+[init]
+  defaultBranch = main
