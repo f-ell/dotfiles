@@ -21,9 +21,12 @@
         (box :space-evenly false)
         (box
             :space-evenly false
+            :orientation 'v'
             :valign 'end'
             :halign 'center'
             :css 'box { margin-bottom: .8em; }'
+            (time-v)
+            (separator-h)
             (systray :orientation 'v')
         )
     )
