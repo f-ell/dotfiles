@@ -14,10 +14,10 @@ set -o autocd -o bashrematch -o extendedglob -o histexpiredupsfirst\
   -o kshglob -o pipefail -o promptsubst -o rematchpcre
 set +o automenu +o autoremoveslash
 
-export KEYTIMEOUT=1
-export SAVEHIST=10000
-export HISTSIZE=$(($SAVEHIST + 100))
-export HISTFILE="$HOME/.zsh_history"
+KEYTIMEOUT=1
+SAVEHIST=10000
+HISTSIZE=$(($SAVEHIST + 100))
+HISTFILE="$HOME/.zsh_history"
 export LESSHISTFILE=-
 
 [[ -f $HOME/.machine ]] && MACHINE=`< $HOME/.machine` || MACHINE=DT
