@@ -48,7 +48,11 @@ j() {
   typeset exit=$?
   (( $exit != 0 )) && return $exit
 
-  [[ $j =~ ^cd ]] && eval $j || printf '%s\n' "$j"
+  if [[ $j =~ ^cd ]]; then
+    eval $j
+  else
+    [[ -n $j ]] && printf '%s\n' "$j"
+  fi
 }
 
 owns() {
