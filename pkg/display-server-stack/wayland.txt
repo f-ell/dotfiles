@@ -9,7 +9,9 @@ way-displays:AUR
 
 ## utilities
 cliphist
+foot
 grim
+gtk-layer-shell # required for eww on wayland
 slurp
 socat
 tofi:AUR
