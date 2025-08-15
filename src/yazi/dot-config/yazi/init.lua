@@ -15,9 +15,9 @@ function Status:name()
 	end
 
 	return ui.Line({
-		ui.Span(" [ "):style(THEME.status.separator_style),
+		ui.Span(" [ "):style(th.status.separator_style),
 		ui.Span(h.name),
-		ui.Span(" ] "):style(THEME.status.separator_style),
+		ui.Span(" ] "):style(th.status.separator_style),
 	})
 end
 
@@ -35,15 +35,15 @@ function Status:permissions()
 	local spans = {}
 	for i = 1, #perm do
 		local c = perm:sub(i, i)
-		local style = THEME.status.perm_type
+		local style = th.status.perm_type
 		if c == "-" or c == "?" then
-			style = THEME.status.perm_sep
+			style = th.status.perm_sep
 		elseif c == "r" then
-			style = THEME.status.perm_read
+			style = th.status.perm_read
 		elseif c == "w" then
-			style = THEME.status.perm_write
+			style = th.status.perm_write
 		elseif c == "x" or c == "s" or c == "S" or c == "t" or c == "T" then
-			style = THEME.status.perm_exec
+			style = th.status.perm_exec
 		end
 		spans[i] = ui.Span(c):style(style)
 	end
@@ -59,7 +59,7 @@ function Status:owner()
 	local o, g = ya.user_name(h.cha.uid), ya.group_name(h.cha.gid)
 
 	return ui.Line({
-		ui.Span((" %s:%s "):format(o, g)):style(THEME.status.separator_style),
+		ui.Span((" %s:%s "):format(o, g)):style(th.status.separator_style),
 	})
 end
 
@@ -70,7 +70,7 @@ function Status:size()
 	end
 
 	return ui.Line({
-		ui.Span((" %6s "):format(ya.readable_size(h:size() or h.cha.len))):style(THEME.status.separator_style),
+		ui.Span((" %6s "):format(ya.readable_size(h:size() or h.cha.len))):style(th.status.separator_style),
 	})
 end
 

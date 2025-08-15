@@ -1,0 +1,3 @@
+AURDEST=/home/aur/build
+AUR_PACMAN_AUTH=doas
+AUR_PAGER=yazi

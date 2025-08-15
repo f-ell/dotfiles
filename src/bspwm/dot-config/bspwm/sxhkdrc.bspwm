@@ -20,6 +20,9 @@ super + Tab
 super + f
   bspc node -f -t \~floating
 
+super + shift + f
+  bspc node -f -t \~fullscreen
+
 # equalize / resize
 super + control + n
   bspc node @/ -E

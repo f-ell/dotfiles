@@ -12,4 +12,11 @@
 (defpoll temp-lt :interval '2s' :initial 'CPU: ?°C' `temp.lt`)
 (defwidget temp-lt [] (label :text temp-lt))
 
-(defwidget time [] (label :text '${formattime(EWW_TIME, '%A %I:%M %p')}'))
+(defwidget time [] (label :text '${formattime(EWW_TIME, '%I:%M %p')}'))
+(defwidget time-v []
+    (box
+        :orientation 'v'
+        (label :text '${formattime(EWW_TIME, '%I')}')
+        (label :text '${formattime(EWW_TIME, '%M')}')
+    )
+)

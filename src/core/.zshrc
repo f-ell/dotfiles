@@ -1,27 +1,20 @@
-# ____   ____
-# |   \  |  |______
-# |    \ |  | ___  \
-# |     \|  | |  \  |
-# |  \   \  | |__/  |
-# |  |\     | _____/
-# |__| \____| | Author: Nico Pareigis
-#          |__| Zsh
-
+# Author: Nico Pareigis
 [[ -t 0 && $- == *i* ]] && stty -ixon
+
+zmodload zsh/mapfile
 
 set -o autocd -o bashrematch -o extendedglob -o histexpiredupsfirst\
   -o histignorealldups -o histignorespace -o incappendhistory -o ksharrays\
   -o kshglob -o pipefail -o promptsubst -o rematchpcre
 set +o automenu +o autoremoveslash
 
-export KEYTIMEOUT=1
-export SAVEHIST=10000
-export HISTSIZE=$(($SAVEHIST + 100))
-export HISTFILE="$HOME/.zsh_history"
+KEYTIMEOUT=1
+SAVEHIST=10000
+HISTSIZE=$(($SAVEHIST + 100))
+HISTFILE="$HOME/.zsh_history"
 export LESSHISTFILE=-
 
-[[ -f $HOME/.machine ]] && MACHINE=`< $HOME/.machine` || MACHINE=DT
-export MACHINE
+export MACHINE="${${(f@)mapfile[$HOME/.machine]}[0]:-DT}"
 export VISUAL=nvim
 export EDITOR=$VISUAL
 
@@ -39,21 +32,11 @@ function _rc_path {
   [[ -n $JAVA_HOME ]] && misc+=("$JAVA_HOME/bin")
 
   local IFS=':'
-  printf "$bin:$perl:${misc[*]}"
+  : ${(P)1::=$bin:$perl:${misc[*]}}
 }
-export PATH=`_rc_path`
+_rc_path PATH
 
 [[ -f $HOME/.aliases ]] && . "$HOME/.aliases"
-
-function preexec {
-  # does not detect obfuscated commands
-  # aliases / indirection / symlinks, newlines / whitespace
-  [[ $3 =~ 'rm'([ \t])+'-r' && $3 =~ ('\$HOME'|$HOME) ]] && {
-    printf 'WARNING: trying to remove $HOME? '
-    sleep 60
-    return 1
-  }
-}
 
 # ------------------------------------------------------------------------------
 
@@ -80,24 +63,29 @@ bindkey '^ ' expand-word
 
 # ------------------------------------------------------------------------------
 
-function _rc_ps1_get_git_head {
-  typeset head=`git rev-parse --is-inside-work-tree 2>/dev/null`
-  ( (( $? != 0 )) || [[ $head != true ]] ) && return 1
+function _rc_ps1_find_git_root {
+  git rev-parse --show-toplevel 2>/dev/null | read
+  (( $? > 0 )) && return 1
 
-  typeset -A refs
+  (( $# > 0 )) && : ${(P)1::=$REPLY}
+  return 0
+}
+
+function _rc_ps1_get_git_head {
+  typeset -A refs=()
   while read; do
     refs+=([${${REPLY#* }%\^\{\}}]="${REPLY% *}")
   done < <(git -C . show-ref --head --heads --tags --abbrev -d)
 
-  head=HEAD
+  typeset head=HEAD
   typeset hid=${refs[HEAD]}
-  typeset -i m b
+  typeset -i m=0 b=0
   for ref id in "${(kv)refs[@]}"; do
     [[ $ref == HEAD ]] && continue
 
     if [[ $hid == $id ]]; then
-      let m++
-      [[ $ref =~ refs/heads/ ]] && let b++
+      let m++                              # HEAD is a valid ref
+      [[ $ref =~ refs/heads/ ]] && let b++ # HEAD is at branch-head
       head=${ref#refs/*/}
       hid=$id
     fi
@@ -107,39 +95,37 @@ function _rc_ps1_get_git_head {
     head=$hid
   elif (( b > 1 )) || (( m > b && b > 0 )); then
     # NOTE: detached head at branch head prefers tag-name over commit
+    # PERF: refactor to native; requires resolving gitdir
     typeset branch=`git -C . branch --show-current`
     [[ -n $branch ]] && head="$branch"
   fi
 
-  printf "$head"
+  : ${(P)1::=$head}
 }
+
 function _rc_ps1_get_git_stash {
-  typeset head=$1
+  typeset root="$2" head="$3"
   [[ -z $head ]] && return 1
 
-  typeset tl=`git rev-parse --show-toplevel`
-  [[ -f $tl/.git ]] && {
-    tl=`< $tl/.git`
-    tl=${tl#gitdir: }
-    [[ -f $tl/commondir ]] && tl+=/`< $tl/commondir`
+  [[ -f $root/.git ]] && {
+    root="${${(f@)mapfile[$root/.git]}[0]#gitdir: }"
+    [[ -f $root/commondir ]] && root+=/"${${(f@)mapfile[$root/commondir]}[0]}"
   }
 
-  [[ -f $tl/refs/stash || -f $tl/.git/refs/stash ]] && printf '~'
-}
-function _rc_ps1_get_git {
-  typeset head=`_rc_ps1_get_git_head` stash=
-  [[ -n $head ]] && stash=`_rc_ps1_get_git_stash $head`
-  printf "$head$stash"
+  [[ -f $root/refs/stash || -f $root/.git/refs/stash ]] && : ${(P)1::='~'}
 }
 
-xset q &>/dev/null && [[ -f $HOME/.prompt_char ]] && {
-  while read; do
-    [[ -z $REPLY ]] && continue
-    _rc_ps1_chr=$REPLY
-    break
-  done < $HOME/.prompt_char
+function _rc_ps1_get_git {
+  typeset root= hd= st=
+  _rc_ps1_find_git_root root || return
+
+  _rc_ps1_get_git_head hd
+  _rc_ps1_get_git_stash st $root $hd
+
+  : ${(P)1::=$hd$st}
 }
-_rc_ps1_chr=${_rc_ps1_chr:-\$}
+
+_rc_ps1_chr="${${(f@)mapfile[$HOME/.prompt_char]}[0]:-\$}"
 
 typeset -A _rc_ps1_cl=(
   [bld]=$'\e[1m'
@@ -152,11 +138,10 @@ typeset -A _rc_ps1_cl=(
 
 function _rc_ps1_set {
   unset PS1
-  typeset ex cwd
+  typeset ex= cwd= git= job='%j'
   (( $1 == 0 )) && ex= || ex=$1
 
-  typeset git=`_rc_ps1_get_git`
-  typeset job='%j'
+  _rc_ps1_get_git git
 
   PS1="%{${_rc_ps1_cl[txt]}%}"
   [[ $PWD == / ]] && cwd=/ || cwd=${PWD##*/}

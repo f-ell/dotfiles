@@ -8,6 +8,7 @@ xorg-xset
 
 ## utilities
 bspwm
+kitty
 picom
 rofi
 scrot

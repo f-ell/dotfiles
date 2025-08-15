@@ -1,5 +1,5 @@
 (defwindow bar-hypr
-    :monitor 'DP-2'
+    :monitor 1
     :geometry (geometry
         :x 0
         :y 0
@@ -21,9 +21,12 @@
         (box :space-evenly false)
         (box
             :space-evenly false
+            :orientation 'v'
             :valign 'end'
             :halign 'center'
             :css 'box { margin-bottom: .8em; }'
+            (time-v)
+            (separator-h)
             (systray :orientation 'v')
         )
     )
