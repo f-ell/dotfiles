@@ -1,11 +1,4 @@
-# ____   ____
-# |   \  |  |______
-# |    \ |  | ___  \ |     \|  | |  \  |
-# |  \   \  | |__/  |
-# |  |\     | _____/
-# |__| \____| | Author: Nico Pareigis
-#          |__| Zsh
-
+# Author: Nico Pareigis
 [[ -t 0 && $- == *i* ]] && stty -ixon
 
 zmodload zsh/mapfile
@@ -71,21 +64,11 @@ bindkey '^ ' expand-word
 # ------------------------------------------------------------------------------
 
 function _rc_ps1_find_git_root {
-  pushd -q "$PWD"
+  git rev-parse --show-toplevel 2>/dev/null | read
+  (( $? > 0 )) && return 1
 
-  while [[ $PWD != / ]]; do
-    # assume that any .git file or directory denotes a valid worktree
-    if [[ -e $PWD/.git ]]; then
-      (( $# > 0 )) && : ${(P)1::=$PWD}
-      popd -q
-      return 0
-    fi
-
-    cd ..
-  done
-
-  popd -q
-  return 1
+  (( $# > 0 )) && : ${(P)1::=$REPLY}
+  return 0
 }
 
 function _rc_ps1_get_git_head {
@@ -121,11 +104,8 @@ function _rc_ps1_get_git_head {
 }
 
 function _rc_ps1_get_git_stash {
-  typeset head=$2
+  typeset root="$2" head="$3"
   [[ -z $head ]] && return 1
-
-  typeset root=
-  _rc_ps1_find_git_root root
 
   [[ -f $root/.git ]] && {
     root="${${(f@)mapfile[$root/.git]}[0]#gitdir: }"
@@ -136,11 +116,11 @@ function _rc_ps1_get_git_stash {
 }
 
 function _rc_ps1_get_git {
-  _rc_ps1_find_git_root || return
+  typeset root= hd= st=
+  _rc_ps1_find_git_root root || return
 
-  typeset hd= st=
   _rc_ps1_get_git_head hd
-  _rc_ps1_get_git_stash st $hd
+  _rc_ps1_get_git_stash st $root $hd
 
   : ${(P)1::=$hd$st}
 }
