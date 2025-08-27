@@ -20,7 +20,7 @@
 )
 
 (defwindow bar-bspwm-lt
-    :monitor 0
+    :monitor '["<primary", 0]'
     :geometry (geometry
         :x 0
         :y 0

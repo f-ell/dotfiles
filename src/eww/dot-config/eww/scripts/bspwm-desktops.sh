@@ -2,9 +2,8 @@
 
 function desktops {
   declare -a obj
-  declare -i n=1
 
-  for d in `bspc query -D`; do
+  for d in `bspc query -D --names`; do
     declare state
     declare -i occupied
 
@@ -15,8 +14,7 @@ function desktops {
     bspc query -D -d $d.focused >/dev/null
     (( $? == 0 )) && state='focused'
 
-    obj+=("{\"id\":\"$d\",\"icon\":\"$n\",\"state\":\"$state\",\"command\":\"bspc desktop -f $d\"}")
-    let n++
+    obj+=("{\"id\":\"$d\",\"icon\":\"${d:0:1}\",\"state\":\"$state\",\"command\":\"bspc desktop -f $d\"}")
   done
 
   declare IFS=,
