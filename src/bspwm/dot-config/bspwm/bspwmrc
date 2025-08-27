@@ -20,6 +20,8 @@ if [[ $MACHINE == DT ]]; then
 else
   bspc monitor eDP1 -d 1 2 3 4
   bspc config pointer_motion_interval 16
+  bspc config remove_unplugged_monitors true
+  bspc config merge_overlapping_monitors true
 fi
 
 bspc config window_gap      0
