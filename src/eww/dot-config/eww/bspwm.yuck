@@ -72,5 +72,5 @@
     )
 )
 
-(deflisten bspwm-layout :initial '?' 'layout.bspwm')
+(deflisten bspwm-layout :initial '?' './scripts/bspwm-layout.sh')
 (defwidget bspwm-layout [] (label :text bspwm-layout))
