@@ -8,7 +8,7 @@ super + Return
   /usr/bin/kitty -d $HOME
 
 super + r
-  rofi -monitor -4 -show dmenu -modes 'dmenu:rofi-custom,drun,window'
+  rofi -monitor -4 -show dmenu -modes 'dmenu:rofi-custom,run,window'
 
 super + {_, shift +} m
   scrot -i -q 100 -F ~/Pictures/Screenshots/scrot_$(date +%Y%m%d-%H%M%S).png \

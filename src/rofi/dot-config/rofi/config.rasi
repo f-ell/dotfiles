@@ -11,6 +11,7 @@ configuration {
   modi: "drun,window";
   show-icons: false;
   display-window: "  win";
+  display-run: "  run";
   display-drun: " drun";
   drun-display-format: "{name}";
   window-format: "{w}. {c} {n}";
