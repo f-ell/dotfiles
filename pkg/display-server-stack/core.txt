@@ -21,6 +21,7 @@ gimp
 pdfjs
 python-adblock
 qutebrowser
+rofi
 silicon
 ueberzug
 zathura

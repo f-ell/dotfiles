@@ -10,7 +10,6 @@ xorg-xset
 bspwm
 kitty
 picom
-rofi
 scrot
 sxhkd
 wmctrl
