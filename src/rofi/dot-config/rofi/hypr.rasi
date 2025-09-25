@@ -1,0 +1,116 @@
+// Author: Nico Pareigis
+
+configuration {
+  modi: "drun,window";
+  drun-display-format: "{name}";
+  window-format: "{c} · {t}";
+
+  location: 0;
+  sort: true;
+  cycle: false;
+  matching: "fuzzy";
+  scroll-method: 0;
+  max-history-size: 30;
+
+  kb-accept-entry:      "Return";
+  kb-cancel:            "Escape";
+  kb-clear-line:        "Control+u";
+  kb-element-next:      "";
+  kb-mode-complete:     "";
+  kb-mode-next:         "Tab";
+  kb-move-char-back:    "Left";
+  kb-move-char-forward: "Right";
+  kb-page-next:         "Control+f";
+  kb-page-prev:         "Control+b";
+  kb-remove-char-back:  "BackSpace";
+  kb-remove-to-eol:     "";
+  kb-remove-to-sol:     "";
+  kb-remove-word-back:  "Control+w";
+  kb-row-down:          "Control+j";
+  kb-row-first:         "Control+h";
+  kb-row-last:          "Control+l";
+  kb-row-up:            "Control+k";
+
+  inputchange {
+    action: "kb-row-first";
+  }
+}
+
+* {
+  font: "Ellograph CF DemiBold 13";
+
+  fg-1: #e0dbd0;
+  fg-2: #cac3b3;
+  fg-3: #859289;
+  bg-1: #2a353b;
+  bg-2: #323c41;
+  bg-3: #4a555b;
+  green: #a7c080;
+
+  text-color:       @fg-2;
+  border-color:     @green;
+  background-color: @bg-1;
+}
+
+window {
+  location: center;
+  anchor: center;
+  width: 512px;
+  padding: 0px;
+  border: 2px;
+  border-radius: 3px;
+  transparency: "real";
+}
+
+mainbox {
+  border-radius: 1px;
+  children: [ "inputbar", "listbox" ];
+}
+
+inputbar {
+  padding: 96px 48px;
+  background-image: url("~/.wallpaper-lowres", width);
+  text-color: inherit;
+  children: [ "entry" ];
+}
+
+entry {
+  padding: 16px;
+  border-radius: 2px;
+  text-color: inherit;
+  background-color:  @bg-1;
+  placeholder-color: @fg-3;
+  hide-cursor-on-empty: true;
+  placeholder: "Search";
+}
+
+listbox {
+  orientation: vertical;
+  padding: 20px;
+  children: [ "listview" ];
+}
+
+listview {
+  lines: 5;
+  columns: 1;
+  spacing: 8px;
+  border: 0px;
+  scrollbar: false;
+}
+
+element {
+  padding: 16px 12px;
+  border-radius: 2px;
+}
+
+element-text {
+  vertical-align: 0.5;
+  horizontal-align: 0;
+}
+
+element normal.normal     { text-color: @fg-1; background-color: inherit; }
+element normal.active     { text-color: @fg-1; background-color: inherit; }
+element selected.normal   { text-color: @bg-1; background-color: @fg-1; }
+element selected.active   { text-color: @bg-1; background-color: @fg-1; }
+element alternate.normal  { text-color: @fg-1; background-color: inherit; }
+element alternate.active  { text-color: @fg-1; background-color: inherit; }
