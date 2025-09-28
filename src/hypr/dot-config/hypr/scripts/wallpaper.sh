@@ -24,7 +24,7 @@ cp "$file" ~/.wallpaper
 
 if command -v magick &>/dev/null; then
   magick ~/.wallpaper \
-    -gravity center -crop 16:9 -scale 1920x1080\> \
+    -gravity center -crop 16:9 -scale 1920x1080 \
     -gravity northwest -region 640x1080+0+0 -blur 0x20 \
     -fill black -colorize 10% \
     +repage ~/.wallpaper-lock
