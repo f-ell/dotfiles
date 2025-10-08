@@ -34,7 +34,8 @@ if command -v magick &>/dev/null; then
     -scale 40% \
     +repage ~/.wallpaper-lowres
 else
-  cp ~/.wallpaper{,-lock,-scaled}
+  cp ~/.wallpaper{,-lock}
+  cp ~/.wallpaper{,-lowres}
 fi
 
 if (( $set == 1 )); then
