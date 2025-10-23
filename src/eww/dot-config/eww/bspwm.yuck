@@ -73,4 +73,4 @@
 )
 
 (deflisten bspwm-layout :initial '?' './scripts/bspwm-layout.sh')
-(defwidget bspwm-layout [] (label :text bspwm-layout))
+(defwidget bspwm-layout [] (button :onclick 'bspc desktop -l next' bspwm-layout))

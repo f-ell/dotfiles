@@ -44,4 +44,4 @@
 )
 
 (deflisten hypr-layout :initial '?' '~/.config/hypr/scripts/layout.sh')
-(defwidget hypr-layout [] (label :text hypr-layout))
+(defwidget hypr-layout [] (button :onclick 'hyprctl dispatch fullscreen 1' hypr-layout))
