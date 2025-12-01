@@ -11,6 +11,11 @@ ct() {
 }
 
 aoc-input() {
+  if [[ -z $AOC_SESSION ]]; then
+    err aoc-input 'AOC_SESSION not set'
+    return 1
+  fi
+
   typeset BASH_REMATCH=() # prevent persistence between calls
   typeset year= day=
   if [[ $1 =~ ([[:digit:]]+)?/([[:digit:]]+) ]]; then
