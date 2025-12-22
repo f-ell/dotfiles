@@ -55,6 +55,7 @@ bspc rule -a Gimp                             state=floating
 bspc rule -a *:*:Picture-in-Picture           state=floating
 
 # AUTOSTART
+dbus-update-activation-environment --all & # Pass WM environment to DBus. Required to unlock Gnome keyring.
 pgrep eww || eww daemon &
 eww open bar-bspwm-${MACHINE,,} &
 playerctld daemon &
@@ -76,9 +77,10 @@ fi
 
 [[ -f $WALLPAPER ]] && feh --no-fehbg --bg-fill "$WALLPAPER"
 
-"$XDG_CONFIG_HOME"/bspwm/scripts/gulp &
-"$XDG_CONFIG_HOME"/bspwm/scripts/floatdesk `bspc query -D -d '^4'` &
-"$XDG_CONFIG_HOME"/bspwm/scripts/dynamic_bar &
+pgrep monitor     || "$XDG_CONFIG_HOME"/bspwm/scripts/monitor &
+pgrep gulp        || "$XDG_CONFIG_HOME"/bspwm/scripts/gulp &
+pgrep floatdesk   || "$XDG_CONFIG_HOME"/bspwm/scripts/floatdesk `bspc query -D -d '^4'` &
+pgrep dynamic_bar || "$XDG_CONFIG_HOME"/bspwm/scripts/dynamic_bar &
 
 # force steam to desktop ^4
 while read -a REPLY; do
