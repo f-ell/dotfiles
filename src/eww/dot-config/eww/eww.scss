@@ -65,6 +65,19 @@ $aqu2: #35a77c;
 
 // -----------------------------------------------------------------------------
 
+decoration {
+  background-color: rgba($bg1, 1);
+  border-radius: .25em;
+}
+
+menuitem {
+  padding: .8em 1.2em;
+
+  &:hover {
+    background-color: rgba($bg2, 1);
+  }
+}
+
 .window {
   color: $gre1;
   background-color: rgba($bg2, .9);

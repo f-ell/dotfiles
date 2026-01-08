@@ -11,6 +11,11 @@ ct() {
 }
 
 aoc-input() {
+  if [[ -z $AOC_SESSION ]]; then
+    err aoc-input 'AOC_SESSION not set'
+    return 1
+  fi
+
   typeset BASH_REMATCH=() # prevent persistence between calls
   typeset year= day=
   if [[ $1 =~ ([[:digit:]]+)?/([[:digit:]]+) ]]; then
@@ -37,7 +42,8 @@ hyprwall() {
     load)
       [[ -z $2 || ! -f $2 ]] && { err hyprwall 'argument error'; return 1; }
       hyprctl hyprpaper preload "$2" 1>/dev/null \
-        && hyprctl hyprpaper wallpaper ,"$2"
+        && hyprctl hyprpaper wallpaper ,"$2" \
+        && cp "$2" ~/.wallpaper
       ;;
     *) err hyprwall 'argument error' && return 1 ;;
   esac

@@ -5,7 +5,6 @@ font            = Ellograph CF Demi-Bold 12
 history_length  = 0
 sticky_history  = no
 show_indicators = false
-icon_path = /usr/share/icons/Adwaita/16x16/status/:/usr/share/icons/Adwaita/16x16/devices/:/usr/share/icons/Adwaita/16x16/legacy/
 
 width  = (0, 512)
 height = 128
@@ -16,6 +15,9 @@ follow = keyboard
 padding            = 12
 horizontal_padding = 12
 frame_width        = 2
+corner_radius = 4
+icon_corner_radius = 6
+gap_size = 2
 
 ellipsize          = end
 alignment          = center

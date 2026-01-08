@@ -1,0 +1,5 @@
+# https://perltidy.github.io/perltidy/perltidy.html#FORMATTING-OPTIONS
+--cuddled-else
+--want-trailing-commas=m
+--add-trailing-commas
+--noblanks-before-comments

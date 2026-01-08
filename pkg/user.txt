@@ -19,25 +19,10 @@ zf:AUR
 zsh
 
 ## languages / toolchains / build systems
-cmake
-deno
-docker
-go
-gradle|maven
-jdk-openjdk
-lua
-ninja
-nodejs
-npm
 perl
 perl-par-packer
 python
 python-pip
-python-pyelftools
-python-setuptools
-python-west:AUR
-qmk
-rustup
 
 ## other
 ffmpeg

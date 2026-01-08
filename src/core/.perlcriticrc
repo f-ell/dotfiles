@@ -1,0 +1,8 @@
+severity = 4
+verbose = 2
+
+[-BuiltinFunctions::RequireBlockGrep]
+[-BuiltinFunctions::RequireBlockMap]
+[-Subroutines::RequireFinalReturn]
+[-ValuesAndExpressions::ProhibitConstantPragma]
+[-Variables::ProhibitMatchVars]

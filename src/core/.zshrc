@@ -63,14 +63,23 @@ bindkey '^ ' expand-word
 
 # ------------------------------------------------------------------------------
 
+# Git worktree root. Only updated on directory change, which may cause
+# unexpected behaviour when a repository is deleted without a directory change.
+typeset -g _rc_ps1_git_root=
+
 function _rc_ps1_find_git_root {
   git rev-parse --show-toplevel 2>/dev/null | read
-  (( $? > 0 )) && return 1
+  if (( $? > 0 )); then
+    : ${(P)1::=}
+    return 1
+  fi
 
-  (( $# > 0 )) && : ${(P)1::=$REPLY}
+  : ${(P)1::=$REPLY}
   return 0
 }
 
+# FIX: this should use the ref/commit found in HEAD instead. Still requires
+# tag-resolution / truncation for detached head.
 function _rc_ps1_get_git_head {
   typeset -A refs=()
   while read; do
@@ -78,24 +87,22 @@ function _rc_ps1_get_git_head {
   done < <(git -C . show-ref --head --heads --tags --abbrev -d)
 
   typeset head=HEAD
-  typeset hid=${refs[HEAD]}
-  typeset -i m=0 b=0
-  for ref id in "${(kv)refs[@]}"; do
+  typeset hsha=${refs[HEAD]}
+  typeset -i m=0 b=0 # m: all matches, b: branch matches
+  for ref sha in "${(kv)refs[@]}"; do
     [[ $ref == HEAD ]] && continue
 
-    if [[ $hid == $id ]]; then
-      let m++                              # HEAD is a valid ref
-      [[ $ref =~ refs/heads/ ]] && let b++ # HEAD is at branch-head
-      head=${ref#refs/*/}
-      hid=$id
+    if [[ $sha == $hsha ]]; then
+      let m++                               # HEAD is a valid ref
+      [[ $ref =~ ^refs/heads/ ]] && let b++ # HEAD is at branch
+      head="${ref#refs/*/}"
     fi
   done
 
   if (( m == 0 )); then
-    head=$hid
+    head=$hsha
   elif (( b > 1 )) || (( m > b && b > 0 )); then
-    # NOTE: detached head at branch head prefers tag-name over commit
-    # PERF: refactor to native; requires resolving gitdir
+    # PERF: refactor to native; requires resolving gitdir.
     typeset branch=`git -C . branch --show-current`
     [[ -n $branch ]] && head="$branch"
   fi
@@ -116,18 +123,18 @@ function _rc_ps1_get_git_stash {
 }
 
 function _rc_ps1_get_git {
-  typeset root= hd= st=
-  _rc_ps1_find_git_root root || return
+  typeset root="$2" hd= st=
+  [[ -z $root ]] && return
 
   _rc_ps1_get_git_head hd
-  _rc_ps1_get_git_stash st $root $hd
+  _rc_ps1_get_git_stash st "$root" "$hd"
 
   : ${(P)1::=$hd$st}
 }
 
-_rc_ps1_chr="${${(f@)mapfile[$HOME/.prompt_char]}[0]:-\$}"
+typeset -g _rc_ps1_chr="${${(f@)mapfile[$HOME/.prompt_char]}[0]:-\$}"
 
-typeset -A _rc_ps1_cl=(
+typeset -gA _rc_ps1_cl=(
   [bld]=$'\e[1m'
   [clr]=$'\e[0m'
   [chr]=$'\e[38;2;160;160;160m'
@@ -141,7 +148,7 @@ function _rc_ps1_set {
   typeset ex= cwd= git= job='%j'
   (( $1 == 0 )) && ex= || ex=$1
 
-  _rc_ps1_get_git git
+  _rc_ps1_get_git git "$_rc_ps1_git_root"
 
   PS1="%{${_rc_ps1_cl[txt]}%}"
   [[ $PWD == / ]] && cwd=/ || cwd=${PWD##*/}
@@ -153,10 +160,16 @@ function _rc_ps1_set {
 }
 
 if xset q &>/dev/null; then
+  _rc_ps1_find_git_root _rc_ps1_git_root
+
   function precmd {
     EXIT=$?
     _rc_ps1_set $EXIT
   }
+  function chpwd {
+    _rc_ps1_find_git_root _rc_ps1_git_root
+  }
+
   function zle-keymap-select {
     [[ $KEYMAP == main ]] && _rc_ps1_set $EXIT
     [[ $KEYMAP == vicmd ]] && _rc_ps1_chr=: _rc_ps1_set $EXIT

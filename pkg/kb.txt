@@ -1,0 +1,7 @@
+# qmk
+qmk
+
+# zmk
+python-pyelftools
+python-setuptools
+python-west:AUR

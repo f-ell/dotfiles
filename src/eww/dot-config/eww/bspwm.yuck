@@ -20,7 +20,7 @@
 )
 
 (defwindow bar-bspwm-lt
-    :monitor 0
+    :monitor '["<primary", 0]'
     :geometry (geometry
         :x 0
         :y 0
@@ -72,5 +72,5 @@
     )
 )
 
-(deflisten bspwm-layout :initial '?' 'layout.bspwm')
-(defwidget bspwm-layout [] (label :text bspwm-layout))
+(deflisten bspwm-layout :initial '?' './scripts/bspwm-layout.sh')
+(defwidget bspwm-layout [] (button :onclick 'bspc desktop -l next' bspwm-layout))

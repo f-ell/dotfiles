@@ -14,5 +14,4 @@ grim
 gtk-layer-shell # required for eww on wayland
 slurp
 socat
-tofi:AUR
 xdg-desktop-portal-hyprland
