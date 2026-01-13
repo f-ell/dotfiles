@@ -39,7 +39,5 @@ else
 fi
 
 if (( $set == 1 )); then
-  hyprctl hyprpaper unload ~/.wallpaper &>/dev/null \
-    && hyprctl hyprpaper preload ~/.wallpaper &>/dev/null \
-    && hyprctl hyprpaper wallpaper ,~/.wallpaper &>/dev/null
+  hyprctl hyprpaper wallpaper ,~/.wallpaper &>/dev/null
 fi
