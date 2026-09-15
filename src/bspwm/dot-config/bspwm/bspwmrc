@@ -24,7 +24,7 @@ else
   bspc config merge_overlapping_monitors true
 fi
 
-bspc config window_gap      0
+bspc config window_gap      16
 bspc config border_width    2
 bspc config split_ratio     0.50
 bspc config top_padding     0
@@ -42,10 +42,10 @@ bspc config focus_follows_pointer   true
 bspc config pointer_follows_focus   false
 bspc config pointer_follows_monitor false
 
-bspc config focused_border_color  '#a7c080'
+bspc config focused_border_color  '#8da101'
 bspc config active_border_color   '#323d43'
 bspc config normal_border_color   '#323d43'
-bspc config presel_feedback_color '#a7c080'
+bspc config presel_feedback_color '#8da101'
 
 # RULES
 bspc rule -a discord  desktop='^5' follow=off state=floating
@@ -75,7 +75,7 @@ else
   pgrep ssm || ssm -t 60 -e c,g -b 30 &
 fi
 
-[[ -f $WALLPAPER ]] && feh --no-fehbg --bg-fill "$WALLPAPER"
+[[ -f $WALLPAPER ]] && feh --no-fehbg --bg-center "$WALLPAPER"
 
 pgrep monitor     || "$XDG_CONFIG_HOME"/bspwm/scripts/monitor &
 pgrep gulp        || "$XDG_CONFIG_HOME"/bspwm/scripts/gulp &
