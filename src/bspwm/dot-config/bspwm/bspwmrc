@@ -13,16 +13,10 @@ bspc rule -r *
 ps -o pid= -C 'bspc subscribe' | xargs kill
 
 # CONFIG
-if [[ $MACHINE == DT ]]; then
-  bspc monitor DP-2 -d 1 2 3 4 5
-  bspc monitor DP-0 -d 6
-  bspc config pointer_motion_interval 7
-else
-  bspc monitor eDP1 -d 1 2 3 4 5 6
-  bspc config pointer_motion_interval 16
-  bspc config remove_unplugged_monitors true
-  bspc config merge_overlapping_monitors true
-fi
+bspc monitor eDP1 -d 1 2 3 4 5 6
+bspc config pointer_motion_interval 16
+bspc config remove_unplugged_monitors true
+bspc config merge_overlapping_monitors true
 
 bspc config window_gap      16
 bspc config border_width    2
@@ -48,42 +42,20 @@ bspc config normal_border_color   '#323d43'
 bspc config presel_feedback_color '#8da101'
 
 # RULES
-bspc rule -a discord  desktop='^6' follow=off state=floating
-bspc rule -a Spotify  desktop='^6' follow=off state=floating
-bspc rule -a steam    desktop='^5' follow=off state=floating
-bspc rule -a Gimp                             state=floating
-bspc rule -a *:*:Picture-in-Picture           state=floating
+bspc rule -a Gimp                   state=floating
+bspc rule -a *:*:Picture-in-Picture state=floating
 
 # AUTOSTART
 dbus-update-activation-environment --all & # Pass WM environment to DBus. Required to unlock Gnome keyring.
 pgrep eww || eww daemon &
 eww open bar-bspwm-${MACHINE,,} &
-playerctld daemon &
 
-if [[ $MACHINE == DT ]]; then
-  pgrep dunst || dunst &
-  pgrep sxhkd || sxhkd "$XDG_CONFIG_HOME"/sxhkd/sxhkdrc.dt "$XDG_CONFIG_HOME"/bspwm/sxhkdrc.bspwm &
-  pgrep conky || { \
-    conky -c "$XDG_CONFIG_HOME"/conky/system.lua \
-    && sleep 1 \
-    && conky -c "$XDG_CONFIG_HOME"/conky/time.lua \
-    && bspc monitor -f primary; \
-  } &
-else
-  pgrep dunst || dunst -conf "$XDG_CONFIG_HOME"/dunst/dunstrc.lt &
-  pgrep sxhkd || sxhkd "$XDG_CONFIG_HOME"/sxhkd/sxhkdrc.lt "$XDG_CONFIG_HOME"/bspwm/sxhkdrc.bspwm &
-  pgrep ssm || ssm -t 60 -e c,g -b 30 &
-fi
+pgrep dunst || dunst -conf "$XDG_CONFIG_HOME"/dunst/dunstrc.lt &
+pgrep sxhkd || sxhkd "$XDG_CONFIG_HOME"/sxhkd/sxhkdrc.lt "$XDG_CONFIG_HOME"/bspwm/sxhkdrc.bspwm &
+pgrep ssm || ssm -t 60 -e c,g -b 30 &
 
-[[ -f $WALLPAPER ]] && feh --no-fehbg --bg-center "$WALLPAPER"
+[[ -f $WALLPAPER ]] && feh --no-fehbg --bg-center "$WALLPAPER" || :
 
 pgrep monitor     || "$XDG_CONFIG_HOME"/bspwm/scripts/monitor &
-pgrep gulp        || "$XDG_CONFIG_HOME"/bspwm/scripts/gulp &
 pgrep floatdesk   || "$XDG_CONFIG_HOME"/bspwm/scripts/floatdesk `bspc query -D -d '^6'` &
 pgrep dynamic_bar || "$XDG_CONFIG_HOME"/bspwm/scripts/dynamic_bar &
-
-# force steam to desktop ^6
-while read -a REPLY; do
-  `xprop -id ${REPLY[-1]} | grep 'STEAM_GAME(CARDINAL)' 2>/dev/null` \
-    && bspc node ${REPLY[-1]} -d '^6'
-done < <(bspc subscribe node_add) &

@@ -9,10 +9,3 @@ super + shift + {F12, F11}
 
 alt + b
   battery
-
-alt + c
-  dunstify -u low -h string:x-dunst-stack-tag:temp "`temp.lt`"
-
-alt + u
-  dunstify -u low -h string:x-dunst-stack-tag:load "Calculating..." \
-  && dunstify -u low -h string:x-dunst-stack-tag:load "`sysload`"
