@@ -18,7 +18,7 @@ export MACHINE="${${(f@)mapfile[$HOME/.machine]}[0]:-DT}"
 export VISUAL=nvim
 export EDITOR=$VISUAL
 
-[[ -f $HOME/.env ]] && . "$HOME/.env"
+[[ -f $HOME/.env ]] && . "$HOME/.env" || :
 
 # ------------------------------------------------------------------------------
 
@@ -36,7 +36,7 @@ function _rc_path {
 }
 _rc_path PATH
 
-[[ -f $HOME/.aliases ]] && . "$HOME/.aliases"
+[[ -f $HOME/.aliases ]] && . "$HOME/.aliases" || :
 
 # ------------------------------------------------------------------------------
 
@@ -222,7 +222,7 @@ zstyle ':completion:*' matcher-list 'm:{[:lower:]}={[:upper:]}' 'l:|=*'
 zstyle ':completion:*' keep-prefix true
 zstyle ':completion:*' verbose false
 
-zstyle ':completion:*:*:nvim:*' ignored-patterns '*.pdf'
+zstyle ':completion:*:*:nvim:*' ignored-patterns '*.pdf|*.o|*.a|*.so'
 
 autoload -Uz compinit
 compinit -d "$XDG_CONFIG_HOME/zsh/zcomp"
