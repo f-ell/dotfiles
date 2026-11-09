@@ -22,18 +22,6 @@ aoc-input() {
   curl -s -H "Cookie:${AOC_SESSION:-;}" https://adventofcode.com/$year/day/$day/input
 }
 
-j() {
-  typeset j=`jump $@`
-  typeset exit=$?
-  (( $exit != 0 )) && return $exit
-
-  if [[ $j =~ ^cd ]]; then
-    eval $j
-  else
-    [[ -n $j ]] && printf '%s\n' "$j"
-  fi
-}
-
 aur-remove() {
   if (( $# == 0 )); then
     err aur-remove 'no package provided'
@@ -49,6 +37,18 @@ aur-remove() {
       rm -rf "${REPLY%/*/*}/build/$p" && printf '==> build files clean\n'
     done
   done < <(aur repo --list-path)
+}
+
+j() {
+  typeset j=`jump $@`
+  typeset exit=$?
+  (( $exit != 0 )) && return $exit
+
+  if [[ $j =~ ^cd ]]; then
+    eval $j
+  else
+    [[ -n $j ]] && printf '%s\n' "$j"
+  fi
 }
 
 ping() {
@@ -77,4 +77,6 @@ alias dcr="pkill dunst; dunst $dconf &; disown dunst"
 alias scr="pkill sxhkd; sxhkd $sconf &; disown sxhkd"
 unset {d,s}conf
 
-[[ -f $HOME/.aliases_novcs ]] && . $HOME/.aliases_novcs
+if [[ -f $HOME/.aliases_novcs ]]; then
+  . $HOME/.aliases_novcs
+fi
