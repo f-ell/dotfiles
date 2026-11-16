@@ -1,25 +1,4 @@
-(defwindow bar-bspwm-dt
-    :monitor 0
-    :geometry (geometry
-        :x 0
-        :y 0
-        :width 42
-        :height '100%'
-        :anchor 'top left'
-    )
-    :wm-ingore false
-    :reserve (struts :distance 42 :side 'left')
-    (box
-        :space-evenly false
-        :orientation 'v'
-        :class 'bar dt'
-        (bspwm-desktops-dt)
-        (separator-h)
-        (bspwm-layout)
-    )
-)
-
-(defwindow bar-bspwm-lt
+(defwindow bar-bspwm
     :monitor '["<primary", 0]'
     :geometry (geometry
         :x 0
@@ -32,11 +11,11 @@
     :reserve (struts :distance 32 :side 'top')
     (centerbox
         :orientation 'h'
-        :class 'bar lt'
+        :class 'bar'
         (box
             :space-evenly false
             :halign 'start'
-            (bspwm-desktops-lt)
+            (bspwm-desktops)
             (separator-v)
             (bspwm-layout)
         )
@@ -47,7 +26,7 @@
             :css 'box { margin-right: .8em; }'
             (battery)
             (separator-v)
-            (temp-lt)
+            (temp)
             (separator-v)
             (time)
         )
@@ -57,14 +36,7 @@
 ;; -----------------------------------------------------------------------------
 
 (deflisten bspwm-desktops :initial '[]' './scripts/bspwm-desktops.sh')
-(defwidget bspwm-desktops-dt []
-    (box :orientation 'v' :class 'desktop'
-        (for d in bspwm-desktops
-            (button :onclick {d.command} :class {d.state} {d.icon})
-        )
-    )
-)
-(defwidget bspwm-desktops-lt []
+(defwidget bspwm-desktops []
     (box :class 'desktop'
         (for d in bspwm-desktops
             (button :onclick {d.command} :class {d.state} {d.icon})

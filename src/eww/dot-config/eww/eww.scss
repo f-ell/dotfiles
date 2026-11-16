@@ -25,12 +25,7 @@ $aqu2: #35a77c;
   color: $fg1;
   background-color: $bg2;
 
-  &.dt button {
-    font-size: .9em;
-    padding: .4em 0;
-  }
-
-  &.lt button {
+  & button {
     padding: 0 .8em;
   }
 }

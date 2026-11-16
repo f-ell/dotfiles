@@ -9,8 +9,8 @@
     )
 )
 
-(defpoll temp-lt :interval '2s' :initial 'CPU: ?°C' `temp.lt`)
-(defwidget temp-lt [] (label :text temp-lt))
+(defpoll temp :interval '2s' :initial 'CPU: ?°C' `temp.lt`)
+(defwidget temp [] (label :text temp))
 
 (defwidget time [] (label :text '${formattime(EWW_TIME, '%I:%M %p')}'))
 (defwidget time-v []
