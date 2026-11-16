@@ -24,3 +24,14 @@ alt + Escape
 
 {XF86AudioRaiseVolume,XF86AudioLowerVolume}
   playerctl volume 0.1{+,-}
+
+# brightness control
+super + {F12, F11}
+  bl {u,d} 5
+
+super + shift + {F12, F11}
+  bl s {100,0}
+
+# miscellaneous
+alt + b
+  battery

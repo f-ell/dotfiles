@@ -63,19 +63,12 @@ alias yeet='doas pacman -Qtdq | doas pacman -Rns -'
 alias xo='xdg-open'
 alias zt='zathura --fork'
 
-sconf='$XDG_CONFIG_HOME/{sxhkd/sxhkdrc,bspwm/sxhkdrc.bspwm} $XDG_CONFIG_HOME/sxhkd/sxhkdrc'
-if [[ $MACHINE = DT ]]; then
-  sconf="${sconf}.dt"
-  dconf=
-else
-  sconf="${sconf}.lt"
-  dconf='-conf $HOME/.config/dunst/dunstrc.lt' 
+if [[ $MACHINE = LT ]]; then
   alias netstart='rfkill unblock wifi; doas systemctl start NetworkManager'
   alias netstop='nmcli d disconnect wlan0; doas systemctl stop NetworkManager; rfkill block wifi'
 fi
-alias dcr="pkill dunst; dunst $dconf &; disown dunst"
-alias scr="pkill sxhkd; sxhkd $sconf &; disown sxhkd"
-unset {d,s}conf
+alias dcr="pkill dunst; dunst -conf $HOME/.config/dunst/dunstrc.lt &; disown dunst"
+alias scr="pkill sxhkd; sxhkd $XDG_CONFIG_HOME/{sxhkd/sxhkdrc,bspwm/sxhkdrc.bspwm} &; disown sxhkd"
 
 if [[ -f $HOME/.aliases_novcs ]]; then
   . $HOME/.aliases_novcs
