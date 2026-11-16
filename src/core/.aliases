@@ -67,7 +67,7 @@ if [[ $MACHINE = LT ]]; then
   alias netstart='rfkill unblock wifi; doas systemctl start NetworkManager'
   alias netstop='nmcli d disconnect wlan0; doas systemctl stop NetworkManager; rfkill block wifi'
 fi
-alias dcr="pkill dunst; dunst -conf $HOME/.config/dunst/dunstrc.lt &; disown dunst"
+alias dcr="pkill dunst; dunst &; disown dunst"
 alias scr="pkill sxhkd; sxhkd $XDG_CONFIG_HOME/{sxhkd/sxhkdrc,bspwm/sxhkdrc.bspwm} &; disown sxhkd"
 
 if [[ -f $HOME/.aliases_novcs ]]; then

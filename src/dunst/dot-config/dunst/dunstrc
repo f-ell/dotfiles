@@ -7,9 +7,9 @@ sticky_history  = no
 show_indicators = false
 
 width  = (0, 512)
-height = 128
+height = 64
 origin = top-right
-offset = (20, 20)
+offset = (20, 50)
 follow = keyboard
 
 padding            = 12
@@ -37,10 +37,3 @@ frame_color = "#a7c080"
 [urgency_critical]
 timeout     = 6s
 frame_color = "#e67e80"
-
-[discord]
-appname     = "discord"
-timeout     = 6s
-foreground  = "#9d9fa2"
-background  = "#2f3136"
-frame_color = "#292b2f"

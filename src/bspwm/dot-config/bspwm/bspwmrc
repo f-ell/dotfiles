@@ -50,7 +50,7 @@ dbus-update-activation-environment --all & # Pass WM environment to DBus. Requir
 pgrep eww || eww daemon &
 eww open bar-bspwm-${MACHINE,,} &
 
-pgrep dunst || dunst -conf "$XDG_CONFIG_HOME"/dunst/dunstrc.lt &
+pgrep dunst || dunst &
 pgrep sxhkd || sxhkd "$XDG_CONFIG_HOME"/sxhkd/sxhkdrc "$XDG_CONFIG_HOME"/bspwm/sxhkdrc.bspwm &
 pgrep ssm || ssm -t 60 -e c,g -b 30 &
 
