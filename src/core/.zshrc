@@ -14,7 +14,6 @@ HISTSIZE=$(($SAVEHIST + 100))
 HISTFILE="$HOME/.zsh_history"
 export LESSHISTFILE=-
 
-export MACHINE="${${(f@)mapfile[$HOME/.machine]}[0]:-DT}"
 export VISUAL=nvim
 export EDITOR=$VISUAL
 
